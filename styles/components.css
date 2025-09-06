@@ -1,0 +1,110 @@
+/* Button styles */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+}
+
+.btn-secondary {
+  @apply bg-gray-700 text-white hover:bg-gray-600 focus:ring-gray-500;
+}
+
+.btn-ghost {
+  @apply bg-transparent text-gray-300 hover:bg-gray-800 focus:ring-gray-500;
+}
+
+/* Card styles */
+.card {
+  @apply rounded-lg p-4 transition-all duration-200;
+}
+
+.card-default {
+  @apply bg-gray-800;
+}
+
+.card-elevated {
+  @apply bg-gray-800 shadow-lg;
+}
+
+.card-bordered {
+  @apply bg-gray-800 border border-gray-700;
+}
+
+/* Form input styles */
+.input {
+  @apply px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.textarea {
+  @apply px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y;
+}
+
+/* Loading spinner */
+.spinner {
+  @apply w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin;
+}
+
+/* Message bubbles */
+.message-bubble {
+  @apply max-w-[80%] rounded-lg p-4;
+}
+
+.message-bubble-user {
+  @apply ml-auto bg-blue-600;
+}
+
+.message-bubble-assistant {
+  @apply mr-auto bg-gray-800;
+}
+
+/* Timeline styles */
+.timeline-date {
+  @apply text-lg font-semibold text-gray-400 mb-2;
+}
+
+.timeline-item {
+  @apply mb-4 last:mb-0;
+}
+
+/* List styles */
+.list-item {
+  @apply flex items-center justify-between p-4 border-b border-gray-700 last:border-b-0;
+}
+
+.list-item-content {
+  @apply flex items-center space-x-3;
+}
+
+/* Checkbox styles */
+.checkbox {
+  @apply w-5 h-5 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500;
+}
+
+/* Icon button styles */
+.icon-button {
+  @apply p-2 rounded-full hover:bg-gray-800 transition-colors duration-200;
+}
+
+/* Badge styles */
+.badge {
+  @apply px-2 py-1 text-xs font-medium rounded-full;
+}
+
+.badge-primary {
+  @apply bg-blue-600 text-white;
+}
+
+.badge-secondary {
+  @apply bg-gray-700 text-white;
+}
+
+/* Tooltip styles */
+.tooltip {
+  @apply absolute z-10 px-2 py-1 text-sm text-white bg-gray-900 rounded shadow-lg opacity-0 transition-opacity duration-200;
+}
+
+.tooltip-trigger:hover .tooltip {
+  @apply opacity-100;
+} 
