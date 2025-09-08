@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSession } from '../contexts/SessionContext';
 import Card from './UI/Card';
 import Button from './UI/Button';
 import { Github, Chrome, LogOut } from 'lucide-react';
@@ -12,6 +13,7 @@ interface AuthScreenProps {
 }
 
 const AuthScreen: React.FC<AuthScreenProps> = () => {
+  const { startNewSession } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState<any>(null);
@@ -54,6 +56,11 @@ const AuthScreen: React.FC<AuthScreenProps> = () => {
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       setUser(result.user); // Ensure user state updates
+      // Start a fresh session for new user
+      sessionStorage.clear();
+      localStorage.removeItem('lastSessionId');
+      localStorage.removeItem('sessions');
+      startNewSession();
     } catch (e: any) {
       setError(e.message);
     }

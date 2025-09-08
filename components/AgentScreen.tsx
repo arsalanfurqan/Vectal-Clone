@@ -1,10 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useSession } from '../contexts/SessionContext';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../utils/firebase';
+import { getTasks, getProjects, getNotes, getIdeas } from '../utils/storage';
 import { ChatMessage, sendAgentMessage } from '../utils/ai';
 import Card from './UI/Card';
 import Button from './UI/Button';
 import { getAgenticMode } from '../utils/agentic';
 
 const AgentScreen: React.FC = () => {
+  const { sessionId } = useSession();
+  const [user] = useAuthState(auth);
+  const [userData, setUserData] = useState<{ tasks: any[]; projects: any[]; notes: any[]; ideas: any[] }>({ tasks: [], projects: [], notes: [], ideas: [] });
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -19,6 +26,41 @@ const AgentScreen: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Reset agent data when user or session changes
+  useEffect(() => {
+    setMessages([]);
+    setInputMessage('');
+    setContext('');
+    // Fetch user-specific data
+    const fetchUserData = async () => {
+      if (user?.uid) {
+        // Filter by user if needed, assuming each item has a userId field
+        const [tasks, projects, notes, ideas] = await Promise.all([
+          getTasks(),
+          getProjects(),
+          getNotes(),
+          getIdeas()
+        ]);
+        setUserData({
+          tasks: tasks.filter((t: any) => t.userId === user.uid),
+          projects: projects.filter((p: any) => p.userId === user.uid),
+          notes: notes.filter((n: any) => n.userId === user.uid),
+          ideas: ideas.filter((i: any) => i.userId === user.uid)
+        });
+      } else {
+        setUserData({ tasks: [], projects: [], notes: [], ideas: [] });
+      }
+    };
+    fetchUserData();
+  }, [user?.uid, sessionId]);
+
+  // Reset agent data when user or session changes
+  useEffect(() => {
+    setMessages([]);
+    setInputMessage('');
+    setContext('');
+  }, [user?.uid, sessionId]);
+
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
 
@@ -32,13 +74,16 @@ const AgentScreen: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await sendAgentMessage(userMessage.content, context, 'agent');
-      
+      // Pass userData to agent for context
+      const response = await sendAgentMessage(
+        userMessage.content,
+        JSON.stringify({ context, ...userData }),
+        'agent'
+      );
       const assistantMessage: ChatMessage = {
         role: 'assistant',
         content: response,
       };
-
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
