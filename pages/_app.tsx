@@ -43,10 +43,15 @@ function AppContent({ Component, pageProps, router }: AppProps) {
     return <div className="flex items-center justify-center min-h-screen text-white text-xl">Loading...</div>;
   }
 
+
   if (!isAuthenticated) {
     // Show AuthScreen as a full overlay, hiding all app content
     const AuthScreen = require('../components/AuthScreen').default;
-    return <AuthScreen />;
+    return (
+      <SessionProvider>
+        <AuthScreen />
+      </SessionProvider>
+    );
   }
 
   return (
